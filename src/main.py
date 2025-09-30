@@ -1,6 +1,7 @@
 from PyQt6.QtCore import QSize
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QStatusBar
-from PyQt6.QtGui import QIcon, QKeyEvent
+from PyQt6.QtWidgets import (QApplication, QMainWindow, QPushButton, QStatusBar, QSystemTrayIcon, QMenu,
+                             QWidget, QHBoxLayout)
+from PyQt6.QtGui import QIcon, QKeyEvent, QAction
 import sys
 
 import audio
@@ -8,7 +9,7 @@ import audio
 def banana(b: int):
     return int(b+1)
 
-# melhor usar classe
+# janela principal
 class UI(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -22,36 +23,56 @@ class UI(QMainWindow):
         self.botao.setMaximumSize(QSize(100, 100))
 
         # arruma o layout
-        self.setCentralWidget(self.botao)
+        layout = QHBoxLayout()
+        layout.addWidget(self.botao)
+        layout.addWidget(QPushButton("dummy"))
+        
+        self.setLayout(layout)
         
         # conexoes de interaçao
         self.botao.clicked.connect(self.botaoapertado)     
         
-        
     def botaoapertado(self):
         self.botao.setText("obg")
 
-    # TODO: colocar isso pra rodar em um icone de bandeja, pra gui ser so pra configuraçoes
     def keyPressEvent(self, evento: QKeyEvent):
+        audio.adcaudio()
         if evento.key() == 90: #se a tecla apertava for z:
             print("z")
             self.surpresa = QStatusBar()
             self.setMenuWidget(self.surpresa)
-                
-        audio.adcaudio()
-        
-        
+
+
 if "__main__" == __name__:
-    print("hello world!")
     clickclack = QApplication(sys.argv)
+    clickclack.setQuitOnLastWindowClosed(False)
     
-    janela = UI()
+    
+    # icone de bandeja pra rodar no fundo
+    bandeja = QSystemTrayIcon()
+    bandeja.setIcon(QIcon("icon.png"))
+    bandeja.setVisible(True)
+
+    menu = QMenu()
+    bandeja.setContextMenu(menu)
+    #bandeja.activated(menu.)
+    # TODO: acertar o menu pra so dawr 1 clique pra abrir
+    menuconfig = QAction("Abrir configurações...")
+    menu.addAction(menuconfig)
+    
+    menusair = QAction("sair")
+    menu.addAction(menusair)
+    
     
     # showtime
+    janela = UI()
     janela.show()
+    menuconfig.triggered.connect(janela.show)
+    menusair.triggered.connect(clickclack.quit)
     
     #=== LOOP ===
     clickclack.exec()
+    
     
     del janela, clickclack
     
