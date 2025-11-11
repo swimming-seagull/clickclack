@@ -1,17 +1,14 @@
 import pygame
-#import time
-import os.path as path
+from os import path, getcwd
 from keyboard import read_event
 
-#from PyQt6.QtCore import QObject, QThread # HEHE
 pygame.mixer.init()
 import threading
 
 print(pygame.mixer.get_init())
-# esse arquivo parece inutil agora,
-# mas com mais audios isso vai funcionar pra encapsulamento
+# TODO: encapsulamento (quando tiver suporte para mais arquivos)
 
-def adcaudio(caminho = "../media/wilhelmscream.mp3"):
+def adcaudio(caminho = getcwd() + "/../media/wilhelmscream.mp3"):
     som = pygame.mixer.Sound(path.abspath(caminho))
     som.play()
     print(pygame.mixer.get_busy())

@@ -22,12 +22,7 @@ def banana(b: int):
 class UI(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.toggle = False # controla se ta rodando a funcionalidade de audio
-        # por causa de como o pyqt6 roda o exec(), não consigo fazer
-        # com q cheque pelo teclado a cada iteração
-        # SÓ se eu fizesse uma UI usando outro modulo
-        # mas acho que não permitir edição enquanto tá rodando já contorna os problemas
-
+        
         # configura icone & nome de janela
         self.setWindowIcon(QIcon(path.abspath("../icon.png"))) #placeholder
         self.setWindowTitle("clickclack")
